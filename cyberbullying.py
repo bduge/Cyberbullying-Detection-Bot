@@ -110,3 +110,23 @@ class CyberbullyingDetectionEngine:
         self.corpus = [row[0] for row in data]
         self.tags = [row[1] for row in data]
 
+    def load_lexicon(self, file):
+        """Loads the lexicon of words from the inputted file name
+        """
+
+        if self.lexicons is None:
+            self.lexicons = {}
+
+            self.lexicons[file] = self._get_lexicon('./data/' + file + '.txt')
+
+    def load_model(self, model_name):
+        """Loads a trained model, its feature vectorizer, and its performance stas
+        """
+
+        self.model = pickle.load(open('./models/' + model_name + '_ml_model.pkl', 'rb'))
+        self.vectorizer = pickle.load(open('./models/' + model_name + '_vectorizer.pkl', 'rb'))
+        self.metrics = pickle.load(open('./models/' + model_name + '_metrics.pkl', 'rb'))
+
+
+
+
