@@ -127,6 +127,20 @@ class CyberbullyingDetectionEngine:
         self.vectorizer = pickle.load(open('./models/' + model_name + '_vectorizer.pkl', 'rb'))
         self.metrics = pickle.load(open('./models/' + model_name + '_metrics.pkl', 'rb'))
 
+    def train_using_bow(self):
+        """ Trains a model using Bag of Words on the loaded corpus and tags
+        """
+        corpus = self._simplify(self.corpus)
+        self.vectorizer = CountVectorizer()
+        self.vectorizer.fit(corpus)
+
+        bag_of_words = self.vectorizer.transform(corpus)
+        x_train, x_test, y_train, y_test = train_test_split(bag_of_words, self.tags, test_size=0.2, stratify=self.tags)
+
+        self.model = MultinomialNB()
+        self.model.fit(x_train, y_train)
+
+        self.metrics = self._model_metrics(x_test, y_test)
 
 
 
