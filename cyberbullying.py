@@ -157,3 +157,16 @@ class CyberbullyingDetectionEngine:
 
         self.metrics = self._model_metrics(x_test, y_test)
 
+    def train_using_custom(self):
+        """ Trains model using a custom feature extraction approach
+        """
+        corpus = self._simplify(self.corpus)
+        self.vectorizer = self.CustomVectorizer(self.lexicons)
+        
+        word_vectors = self.vectorizer.transform(corpus)
+        x_train, x_test, y_train, y_test = train_test_split(word_vectors, self.tags, test_size=0.2, stratify=self.tags)
+
+        self.model = SVC()
+        self.model.fit(x_train, y_train)
+
+        self.metrics = self._model_metrics(x_test, y_test)
