@@ -170,3 +170,10 @@ class CyberbullyingDetectionEngine:
         self.model.fit(x_train, y_train)
 
         self.metrics = self._model_metrics(x_test, y_test)
+
+     def evaluate(self):
+        """ Returns a dictionary of model performance metrics
+        """
+        return self.metrics
+
+    
