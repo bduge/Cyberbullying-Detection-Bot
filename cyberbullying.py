@@ -170,10 +170,21 @@ class CyberbullyingDetectionEngine:
         self.model.fit(x_train, y_train)
 
         self.metrics = self._model_metrics(x_test, y_test)
-
-     def evaluate(self):
+        
+    def evaluate(self):
         """ Returns a dictionary of model performance metrics
         """
         return self.metrics
 
-    
+    def save_model(self, model_name):
+        """ Saves the model for future use
+        """
+        pickle.dump(self.model, open('./models/' + model_name + '_ml_model.pkl', 'wb'))
+        pickle.dump(self.vectorizer, open('./models/' + model_name + '_vectorizer.pkl', 'wb'))
+        pickle.dump(self.metrics, open('./models/' + model_name + '_metrics.pkl', 'wb'))
+
+    def predict(self, corpus):
+        """ Takes in a text corpus and returns predictions
+        """
+        x = self.vectorizer.transform(self._simplify(corpus))
+        return self.model.predict(x)
