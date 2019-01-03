@@ -188,3 +188,34 @@ class CyberbullyingDetectionEngine:
         """
         x = self.vectorizer.transform(self._simplify(corpus))
         return self.model.predict(x)
+
+if __name__ == '__main__':
+    reddit = praw.Reddit(
+        client_id = 'VQfaFXcANtuMcg',  
+        client_secret = 'qH_kXjrLrbd22FJF7MK8bdrUzok',
+        user_agent = 'script_name by /u/username' 
+    )
+
+    new_comments = reddit.subreddit('TwoXChromosomes').comments(limit=1000)
+    queries = [comment.body for comment in new_comments]
+
+    engine = CyberbullyingDetectionEngine()
+    engine.load_corpus('./data/final_labelled_data.pkl', 'tweet', 'class')
+
+    engine.load_lexicon('hate-words')
+    engine.load_lexicon('neg-words')
+    engine.load_lexicon('pos-words')
+    engine.load_lexicon('second_person_words')
+    engine.load_lexicon('third_person_words')
+    engine.load_model('bow')
+    print(engine.evaluate())
+    print(engine.predict(queries))
+
+    engine.load_model('tfidf')
+    print(engine.evaluate())
+    print(engine.predict(queries))
+
+    engine.load_model('custom')
+    print(engine.evaluate())
+    print(engine.predict(queries))
+
