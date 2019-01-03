@@ -196,8 +196,18 @@ if __name__ == '__main__':
         user_agent = 'script_name by /u/username' 
     )
 
-    new_comments = reddit.subreddit('TwoXChromosomes').comments(limit=1000)
-    queries = [comment.body for comment in new_comments]
+    valid = False
+    subreddit = input("Which Subreddit would you like to check for cyberbullying?: r/")
+
+    while valid is False:
+        try:
+            new_comments = reddit.subreddit(subreddit).comments(limit=1000)
+            queries = [comment.body for comment in new_comments]
+            valid = True
+        except:
+            subreddit = input(f"r/{subreddit} isn't a valid Subreddit. Please try again: r/")
+            
+        
 
     engine = CyberbullyingDetectionEngine()
     engine.load_corpus('./data/final_labelled_data.pkl', 'tweet', 'class')
