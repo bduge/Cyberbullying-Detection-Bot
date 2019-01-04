@@ -206,8 +206,7 @@ if __name__ == '__main__':
             valid = True
         except:
             subreddit = input(f"r/{subreddit} isn't a valid Subreddit. Please try again: r/")
-            
-        
+                 
 
     engine = CyberbullyingDetectionEngine()
     engine.load_corpus('./data/final_labelled_data.pkl', 'tweet', 'class')
@@ -217,15 +216,13 @@ if __name__ == '__main__':
     engine.load_lexicon('pos-words')
     engine.load_lexicon('second_person_words')
     engine.load_lexicon('third_person_words')
-    engine.load_model('bow')
-    print(engine.evaluate())
-    print(engine.predict(queries))
-
-    engine.load_model('tfidf')
-    print(engine.evaluate())
-    print(engine.predict(queries))
 
     engine.load_model('custom')
+    results = engine.predict(queries)
     print(engine.evaluate())
-    print(engine.predict(queries))
+    print(results)
+
+    bullyingNumber = numpy.count_nonzero(results == 1)
+    print(f"Out of {len(queries)} comments, there were {bullyingNumber} detected comments containing cyberbullying")
+    print(f"Percetage of comments containing cyberbullying: {(bullyingNumber / len(queries)) * 100}%")
 
